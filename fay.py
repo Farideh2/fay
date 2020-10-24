@@ -6,6 +6,7 @@ import os
 import pyaudio
 from selenium import webdriver
 
+
 num = 1
 def assistant(output):
     global num
@@ -25,15 +26,16 @@ def get_audio():
     listener = sr.Recognizer()
     with sr.Microphone() as source:
         print("speak...")
-        listener.adjust_for_ambient_noise(source,duration=1) 
-        audio = listener.listen(source, None)
-    #try:
-       # text = listener.recognize_google(audio, lenguage = 'en-UK')
-        #print ("you: ", text )
-       # return text
-   # except:
-       # assistant("I did not understand you")
-        #return 0
+        listener.adjust_for_ambient_noise(source,duration=0.2) 
+        audio = listener.listen(source)
+
+    try:
+        text = listener.recognize_sphinx(audio, lenguage = 'en-UK')
+        print ("you: ", text )
+        return text
+    except:
+        assistant("I did not understand you")
+        return "0"
 
 if __name__ == "__main__": 
     assistant("What's your name, Human?") 
@@ -43,12 +45,11 @@ if __name__ == "__main__":
     while(1): 
   
         assistant("What can i do for you?") 
-        text = get_audio().lower() 
+        text = get_audio()
   
-        if text == 0: 
+        if text == "0": 
             continue
   
         if "exit" in str(text) or "bye" in str(text) or "sleep" in str(text): 
             assistant("Ok bye, "+ name+'.') 
             break
-  
